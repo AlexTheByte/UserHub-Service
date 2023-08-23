@@ -1,19 +1,22 @@
 import { Controller, Get } from '@nestjs/common';
-import { EventsService } from './events/events.service';
-import { EventPattern } from '@nestjs/microservices';
-import { Logger } from '@nestjs/common';
+import CustomLoggerService from './logger.service';
+import { Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
+import { UsersJobsType } from 'src/enums/users-jobs-type.enums';
+import { TravelQueue } from './enums/travel-queue.enums';
 
 @Controller({ version: '1' })
 export class AppController {
-  constructor(private eventsService: EventsService) {}
-  @Get('test')
-  test() {
-    this.eventsService.emitEvent('example.event', { test: 'test' });
-    return { message: 'Event triggered' };
+  logger: CustomLoggerService;
+
+  constructor(@InjectQueue(TravelQueue.Users) private readonly usersJobsQueue: Queue) {
+    this.logger = new CustomLoggerService(AppController.name);
+    this.usersJobsQueue.add(UsersJobsType.Creation, { test: 'test' });
   }
 
-  @EventPattern('example.event')
-  async handleEvent(data: any) {
-    console.log('Received event data:', data);
+  @Get('test')
+  test() {
+    this.usersJobsQueue.add({ test: 'test' });
+    return { message: 'Job Sent' };
   }
 }

@@ -27,6 +27,19 @@ services:
       MYSQL_DATABASE: travel_db
     networks:
       - travel-network
+
+  travel-redis:
+    container_name: travel-redis
+    image: redis:7
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "password"]
+    networks:
+      - travel-network
+    # ports:
+    #   - "6379:6379"
+    # volumes:
+    #   - redis-data:/data
+
+
   # reverse-proxy:
   #   image: nginx:latest
   #   container_name: travel-reverse-proxy

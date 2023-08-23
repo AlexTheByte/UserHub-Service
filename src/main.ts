@@ -10,7 +10,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  const config = new DocumentBuilder().setTitle('users example').setDescription('Travel Users service').setVersion('0.1').build();
+  const config = new DocumentBuilder().setTitle('Travel Users service').setDescription('Travel Users service').setVersion('0.1').addBearerAuth().build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 

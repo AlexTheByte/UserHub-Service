@@ -20,6 +20,10 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
+  findOneByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOneBy({ email });
+  }
+
   findOne(id: number): Promise<User> {
     return this.usersRepository.findOneBy({ id });
   }

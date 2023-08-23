@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  travel-users-service:
+    container_name: travel-users-service
+    image: node:20
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 3000:3000
+    working_dir: /usr/src/app
+    command: npm run start:debug
+    depends_on:
+      - travel-users-db
+    networks:
+      - travel-network
+
+  travel-users-db:
+    container_name: travel-users-db
+    image: mariadb:11
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: travel_db
+    networks:
+      - travel-network
+  # reverse-proxy:
+  #   image: nginx:latest
+  #   container_name: travel-reverse-proxy
+  #   volumes:
+  #     - ./storage/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   ports:
+  #     - 80:80
+  #   networks:
+  #     - travel-network
+
+  # domain4632-db:
+  #   container_name: domain4632-db
+  #   image: mongo:latest
+  #   volumes:
+  #     - ./storage/db:/data/db
+  #   ports:
+  #     - 27017:27017
+  #   networks:
+  #     - domain4632-network
+
+networks:
+  travel-network:

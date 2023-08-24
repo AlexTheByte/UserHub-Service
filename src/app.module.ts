@@ -7,6 +7,7 @@ import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { BullModule } from '@nestjs/bull';
+import { Auth } from './auth/entities/auth.entity';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { BullModule } from '@nestjs/bull';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Auth],
       synchronize: process.env.NODE_ENV === 'development',
     }),
     AuthModule,

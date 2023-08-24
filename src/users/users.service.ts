@@ -12,16 +12,12 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto): User {
-    return this.usersRepository.create(createUserDto);
+  create(createUserDto: CreateUserDto): Promise<User> {
+    return this.usersRepository.save(createUserDto);
   }
 
   findAll(): Promise<User[]> {
     return this.usersRepository.find();
-  }
-
-  findOneByEmail(email: string): Promise<User> {
-    return this.usersRepository.findOneBy({ email });
   }
 
   findOne(id: number): Promise<User> {

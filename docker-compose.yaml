@@ -62,3 +62,4 @@ services:
 
 networks:
   travel-network:
+    external: true

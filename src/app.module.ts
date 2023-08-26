@@ -11,16 +11,18 @@ import { Auth } from './auth/entities/auth.entity';
 
 @Module({
   imports: [
-    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('development', 'staging', 'preprod', 'prod').exist(),
         DB_HOST: Joi.string().exist(),
-        DB_PORT: Joi.number(),
+        DB_PORT: Joi.number().exist(),
         DB_USERNAME: Joi.string().exist(),
         DB_PASSWORD: Joi.string().exist(),
         DB_NAME: Joi.string().exist(),
+        REDIS_HOST: Joi.string().exist(),
+        REDIS_PORT: Joi.number().exist(),
+        REDIS_PASSWORD: Joi.string().exist(),
       }),
       validationOptions: {
         allowUnknown: true,
@@ -37,7 +39,6 @@ import { Auth } from './auth/entities/auth.entity';
       entities: [User, Auth],
       synchronize: process.env.NODE_ENV === 'development',
     }),
-    AuthModule,
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
@@ -45,9 +46,8 @@ import { Auth } from './auth/entities/auth.entity';
         password: process.env.REDIS_PASSWORD,
       },
     }),
-    BullModule.registerQueue({
-      name: 'users',
-    }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [],

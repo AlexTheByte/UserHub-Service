@@ -7,8 +7,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { TravelJobQueue } from 'src/enums/travel-jobs-queue.enums';
 import { Queue } from 'bull';
+import { ClientProxy, ClientProxyFactory, EventPattern, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { IRedisConfig } from 'src/config/redis.configuration';
 import { UsersJobsType } from 'src/enums/users-jobs-type.enums';
-import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 @Controller({
   path: 'users',
@@ -17,22 +19,29 @@ import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservice
 export class UsersController {
   client: ClientProxy;
 
-  constructor(private readonly usersService: UsersService, @InjectQueue(TravelJobQueue.Users) private readonly usersJobsQueue: Queue) {
+  constructor(
+    private readonly usersService: UsersService,
+    @InjectQueue(TravelJobQueue.Users) private readonly usersJobsQueue: Queue,
+    private readonly configService: ConfigService,
+  ) {
+    const redisConfig = this.configService.get<IRedisConfig>('redis');
+
     this.client = ClientProxyFactory.create({
       transport: Transport.REDIS,
-      options: {
-        host: process.env.REDIS_HOST,
-        port: +process.env.REDIS_PORT,
-        password: process.env.REDIS_PASSWORD,
-      },
+      options: { ...redisConfig },
     });
   }
+
+  // @EventPattern('User:Created')
+  // async handleUserCreated(data: any) {
+  //   console.log(`Event data received : ${JSON.stringify(data)}`);
+  // }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     console.log('Request http received');
-    await this.client.emit('User:Created', createUserDto);
-    // await this.usersJobsQueue.add(UsersJobsType.Creation, createUserDto);
+    // await this.client.emit('User:Created', createUserDto);
+    await this.usersJobsQueue.add(UsersJobsType.Creation, createUserDto);
     return 'Ok';
   }
 

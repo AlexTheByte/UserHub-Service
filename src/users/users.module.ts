@@ -4,8 +4,8 @@ import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UsersJobsConsumer } from 'src/users/users-jobs.consumer';
-import { UsersEventsConsumer } from './users-events.consumer';
 import { BullModule } from '@nestjs/bull';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { BullModule } from '@nestjs/bull';
     }),
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersJobsConsumer, UsersEventsConsumer],
+  providers: [UsersService, UsersJobsConsumer],
   exports: [UsersService],
 })
 export class UsersModule {}

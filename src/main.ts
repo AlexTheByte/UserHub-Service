@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { INestApplication, VersioningType } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { IRedisConfig } from './config/redis.configuration';
 
 function configVersioning(app: INestApplication) {
   app.enableVersioning({
@@ -17,13 +19,11 @@ function configSwagger(app: INestApplication) {
 }
 
 function configMicroservices(app: INestApplication) {
+  const redisConfig = app.get(ConfigService).get<IRedisConfig>('redis');
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,
-    options: {
-      host: process.env.REDIS_HOST,
-      port: +process.env.REDIS_PORT,
-      password: process.env.REDIS_PASSWORD,
-    },
+    options: { ...redisConfig },
   });
 
   app.startAllMicroservices();

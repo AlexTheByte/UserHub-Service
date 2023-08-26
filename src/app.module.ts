@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { BullModule } from '@nestjs/bull';
 import { Auth } from './auth/entities/auth.entity';
+import redisConfiguration from './config/redis.configuration';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Auth } from './auth/entities/auth.entity';
         allowUnknown: true,
         abortEarly: true,
       },
+      load: [redisConfiguration],
     }),
     TypeOrmModule.forRoot({
       type: 'mariadb',

@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, ParseIntPipe, UseGuards, Request, Post } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, ParseIntPipe, UseGuards, Request, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -7,10 +7,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { TravelJobQueue } from 'src/enums/travel-jobs-queue.enums';
 import { Queue } from 'bull';
-import { ClientProxy, ClientProxyFactory, EventPattern, Transport } from '@nestjs/microservices';
+import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { IRedisConfig } from 'src/config/redis.configuration';
 import { UsersJobsType } from 'src/enums/users-jobs-type.enums';
+import ResponseDto from 'src/dto/response.dto';
+import { User } from './entities/user.entity';
 
 @Controller({
   path: 'users',
@@ -32,45 +34,45 @@ export class UsersController {
     });
   }
 
+  // TODO (For example) :
   // @EventPattern('User:Created')
   // async handleUserCreated(data: any) {
   //   console.log(`Event data received : ${JSON.stringify(data)}`);
   // }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
-    console.log('Request http received');
-    // await this.client.emit('User:Created', createUserDto);
     await this.usersJobsQueue.add(UsersJobsType.Creation, createUserDto);
-    return 'Ok';
+    return {};
   }
 
-  // @ApiCreatedResponse({
-  //   type: CreateTaskResponseDto,
-  // })
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async me(@Request() req): Promise<UserResponseDto> {
+  async me(@Request() req): Promise<ResponseDto<User>> {
     const user = await this.usersService.findOne(req.user.id);
     return new UserResponseDto(user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(): Promise<UserResponseDto[]> {
+  async findAll(): Promise<ResponseDto<User[]>> {
     const users = await this.usersService.findAll();
-    return users.map(user => new UserResponseDto(user));
+    return UserResponseDto.create(users);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<ResponseDto<User>> {
+    const user = await this.usersService.findOne(id);
+    return UserResponseDto.create(user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    await this.usersJobsQueue.add(UsersJobsType.Update, updateUserDto);
+    return {};
   }
 }

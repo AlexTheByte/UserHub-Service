@@ -6,10 +6,6 @@ export interface IRedisConfig {
   password: string;
 }
 
-export const moduleRedisConfig = (configService: ConfigService) => ({
-  ...configService.get<IRedisConfig>('redis'),
-});
-
 export default registerAs('redis', () => ({
   host: process.env.REDIS_HOST,
   port: parseInt(process.env.REDIS_PORT),

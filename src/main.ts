@@ -5,6 +5,7 @@ import { INestApplication, VersioningType } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { IRedisConfig } from './config/redis.configuration';
+import helmet from 'helmet';
 
 function configVersioning(app: INestApplication) {
   app.enableVersioning({
@@ -29,9 +30,14 @@ function configMicroservices(app: INestApplication) {
   app.startAllMicroservices();
 }
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+function configHelmet(app: INestApplication) {
+  app.use(helmet());
+}
 
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, { cors: true });
+
+  configHelmet(app);
   configVersioning(app);
   configMicroservices(app);
   configSwagger(app);

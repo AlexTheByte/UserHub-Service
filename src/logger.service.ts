@@ -14,6 +14,7 @@ export default class CustomLoggerService implements LoggerService {
           return `${timestamp} [${this.serviceName}] ${level}: ${message}`;
         }),
       ),
+      level: process.env.NODE_ENV === 'development' ? 'debug' : 'error',
       transports: [
         new winston.transports.File({
           filename: 'storage/logs/app.log',

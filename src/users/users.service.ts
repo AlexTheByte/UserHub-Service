@@ -1,35 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
-import { IRedisConfig } from 'src/config/redis.configuration';
+import { ICreateUser } from './interfaces/create-user.interface';
+import { IUpdateUser } from './interfaces/update-user.interface';
 
 @Injectable()
 export class UsersService {
-  client: ClientProxy;
-
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
-    private readonly configService: ConfigService,
-  ) {
-    const redisConfig = this.configService.get<IRedisConfig>('redis');
+    private readonly usersRepository: Repository<User>,
+  ) {}
 
-    this.client = ClientProxyFactory.create({
-      transport: Transport.REDIS,
-      options: { ...redisConfig },
-    });
-  }
-
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = await this.usersRepository.save(createUserDto);
-
-    this.client.emit('User:Created', user);
-    return user;
+  async create(user: ICreateUser): Promise<User> {
+    return await this.usersRepository.save(user);
   }
 
   findAll(): Promise<User[]> {
@@ -40,8 +25,8 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto): Promise<UpdateResult> {
-    return this.usersRepository.update(id, updateUserDto);
+  async update(id: number, updateUserDto: IUpdateUser): Promise<UpdateResult> {
+    return await this.usersRepository.update(id, updateUserDto);
   }
 
   remove(id: number): Promise<DeleteResult> {

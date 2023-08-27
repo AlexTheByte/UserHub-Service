@@ -5,12 +5,12 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserResponseDto } from './dto/user-response.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectQueue } from '@nestjs/bull';
-import { TravelJobQueue } from 'src/enums/travel-jobs-queue.enums';
+import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
 import { Queue } from 'bull';
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { IRedisConfig } from 'src/config/redis.configuration';
-import { UsersJobsType } from 'src/enums/users-jobs-type.enums';
+import { UserJobType } from 'src/enums/user-job-type.enums';
 import ResponseDto from 'src/dto/response.dto';
 import { User } from './entities/user.entity';
 
@@ -23,7 +23,7 @@ export class UsersController {
 
   constructor(
     private readonly usersService: UsersService,
-    @InjectQueue(TravelJobQueue.Users) private readonly usersJobsQueue: Queue,
+    @InjectQueue(TravelJobQueue.User) private readonly usersJobsQueue: Queue,
     private readonly configService: ConfigService,
   ) {
     const redisConfig = this.configService.get<IRedisConfig>('redis');
@@ -43,7 +43,7 @@ export class UsersController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
-    await this.usersJobsQueue.add(UsersJobsType.Creation, createUserDto);
+    await this.usersJobsQueue.add(UserJobType.Create, createUserDto);
     return {};
   }
 
@@ -72,7 +72,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    await this.usersJobsQueue.add(UsersJobsType.Update, updateUserDto);
+    await this.usersJobsQueue.add(UserJobType.Update, updateUserDto);
     return {};
   }
 }

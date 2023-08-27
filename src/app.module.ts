@@ -35,7 +35,17 @@ import throttleConfiguration, { IThrottleConfig } from './config/throttle.config
     }),
     BullModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
-        redis: { ...configService.get<IRedisConfig>('redis') },
+        redis: {
+          ...configService.get<IRedisConfig>('redis'),
+        },
+        defaultJobOptions: {
+          attempts: 10, // Nombre de réessayages max
+          removeOnFail: false,
+          backoff: {
+            type: 'fixed', // Type de backoff (exponentiel dans cet exemple)
+            delay: 1000, // Délai initial entre les réessayages en millisecondes
+          },
+        },
       }),
       inject: [ConfigService],
     }),

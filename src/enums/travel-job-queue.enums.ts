@@ -1,3 +1,3 @@
 export enum TravelJobQueue {
-  Users = 'users',
+  User = 'user',
 }

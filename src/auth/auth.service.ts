@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { ICreateAuth } from './interfaces/create-auth.interface';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -15,9 +16,14 @@ export class AuthService {
   ) {}
 
   async validate(email: string, password: string): Promise<any> {
-    const auth = await this.authsRepository.findOne({ where: { email: email }, relations: ['user'] });
+    const auth = await this.authsRepository.findOne({
+      where: { email: email },
+      relations: ['user'],
+    });
 
-    if (auth && auth.password === password) {
+    // TODO : Marche pas ici
+    console.log(await bcrypt.compare(password, auth.password, r => console.log(r)));
+    if (auth && (await bcrypt.compare(password, auth.password))) {
       return auth.user;
     }
 
@@ -32,6 +38,10 @@ export class AuthService {
   }
 
   async create(user: User, auth: ICreateAuth) {
-    return await this.authsRepository.save({ user: user, email: auth.email, password: auth.password });
+    return await this.authsRepository.save({
+      user: user,
+      email: auth.email,
+      password: await bcrypt.hash(auth.password, 10),
+    });
   }
 }

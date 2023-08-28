@@ -6,29 +6,23 @@ import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
-import { IRedisConfig } from 'src/config/redis.configuration';
+import { ClientProxy } from '@nestjs/microservices';
 import { ICreateUser } from './interfaces/create-user.interface';
 import { ICreateAuth } from 'src/auth/interfaces/create-auth.interface';
 import * as _ from 'lodash';
 import { TravelEvent } from 'src/enums/travel-event.enums';
 import { UserEventType } from 'src/enums/user-event-type.enums';
+import { Inject } from '@nestjs/common';
 
 @Processor(TravelJobQueue.User)
 export class UsersJobsConsumer {
   private readonly logger = new CustomLoggerService(UsersJobsConsumer.name);
 
-  client: ClientProxy;
-
-  constructor(private readonly configService: ConfigService, private readonly usersService: UsersService, private readonly authService: AuthService) {
-    const redisConfig = this.configService.get<IRedisConfig>('redis');
-
-    this.client = ClientProxyFactory.create({
-      transport: Transport.REDIS,
-      options: { ...redisConfig },
-    });
-  }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+    @Inject('REDIS_QUEUE_CLIENT') private readonly client: ClientProxy,
+  ) {}
 
   @Process(UserJobType.Create)
   async creation(job: Job<CreateUserDto>) {

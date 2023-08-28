@@ -1,4 +1,16 @@
-import { Controller, Get, Body, Patch, Param, ParseIntPipe, UseGuards, Request, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+  Request,
+  Post,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -7,9 +19,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
 import { Queue } from 'bull';
-import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
-import { IRedisConfig } from 'src/config/redis.configuration';
 import { UserJobType } from 'src/enums/user-job-type.enums';
 import ResponseDto from 'src/dto/response.dto';
 import { User } from './entities/user.entity';
@@ -19,26 +28,10 @@ import { User } from './entities/user.entity';
   version: '1',
 })
 export class UsersController {
-  client: ClientProxy;
-
   constructor(
     private readonly usersService: UsersService,
     @InjectQueue(TravelJobQueue.User) private readonly usersJobsQueue: Queue,
-    private readonly configService: ConfigService,
-  ) {
-    const redisConfig = this.configService.get<IRedisConfig>('redis');
-
-    this.client = ClientProxyFactory.create({
-      transport: Transport.REDIS,
-      options: { ...redisConfig },
-    });
-  }
-
-  // TODO (For example) :
-  // @EventPattern('User:Created')
-  // async handleUserCreated(data: any) {
-  //   console.log(`Event data received : ${JSON.stringify(data)}`);
-  // }
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

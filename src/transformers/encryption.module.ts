@@ -2,9 +2,9 @@ import { DynamicModule, Module } from '@nestjs/common';
 import EncryptionService from './encryption.service';
 import EncryptionTransformer from './encryption.transformer';
 
-// interface ModuleOptions {
-//   key: string;
-// }
+interface ModuleOptions {
+  key: string;
+}
 
 // export const myModuleOptionsFactory = async ({ key }: { key: string }): Promise<ModuleOptions> => {
 //   return {

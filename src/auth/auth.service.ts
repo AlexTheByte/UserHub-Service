@@ -21,8 +21,6 @@ export class AuthService {
       relations: ['user'],
     });
 
-    // TODO : Marche pas ici
-    console.log(await bcrypt.compare(password, auth.password, r => console.log(r)));
     if (auth && (await bcrypt.compare(password, auth.password))) {
       return auth.user;
     }

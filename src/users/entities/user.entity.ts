@@ -1,13 +1,18 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import EncryptionTransformer from 'src/transformers/encryption.transformer';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    transformer: EncryptionTransformer,
+  })
   firstName: string;
 
-  @Column()
+  @Column({
+    transformer: EncryptionTransformer,
+  })
   lastName: string;
 }

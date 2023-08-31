@@ -1,4 +1,4 @@
-export class CreateUserDto {
+export default class CreateUserDto {
   'email': string;
   'password': string;
   'firstName': string;

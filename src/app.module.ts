@@ -58,6 +58,7 @@ import encryptionConfiguration from './config/encryption.configuration';
       }),
       inject: [ConfigService],
     }),
+
     // EncryptionModule.forRootAsync({})
     // AuthModule,
     UsersModule,

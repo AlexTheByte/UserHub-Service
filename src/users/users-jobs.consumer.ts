@@ -1,18 +1,18 @@
 import { Processor, Process } from '@nestjs/bull';
 import { Job } from 'bull';
-import CustomLoggerService from '../logger.service';
 import { UserJobType } from 'src/enums/user-job-type.enums';
 import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { ICreateUser } from './interfaces/create-user.interface';
-import { ICreateAuth } from 'src/auth/interfaces/create-auth.interface';
 import * as _ from 'lodash';
+import { Inject } from '@nestjs/common';
 import { TravelEvent } from 'src/enums/travel-event.enums';
 import { UserEventType } from 'src/enums/user-event-type.enums';
-import { Inject } from '@nestjs/common';
+import { ICreateAuth } from 'src/auth/interfaces/create-auth.interface';
+import CustomLoggerService from 'src/logger.service';
+import CreateUserDto from './dto/create-user.dto';
 
 @Processor(TravelJobQueue.User)
 export class UsersJobsConsumer {

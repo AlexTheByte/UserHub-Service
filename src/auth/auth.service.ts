@@ -28,11 +28,9 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: User): Promise<string> {
     const payload = { sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    return await this.jwtService.sign(payload);
   }
 
   async create(user: User, auth: ICreateAuth) {

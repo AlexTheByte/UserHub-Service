@@ -1,9 +1,11 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { INestApplication, VersioningType } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
+import { AppModule } from './app.module';
 import { IRedisConfig } from './config/redis.configuration';
 import helmet from 'helmet';
 
@@ -14,7 +16,12 @@ function configVersioning(app: INestApplication) {
 }
 
 function configSwagger(app: INestApplication) {
-  const config = new DocumentBuilder().setTitle('Travel Users service').setDescription('Travel Users service').setVersion('0.1').addBearerAuth().build();
+  const config = new DocumentBuilder()
+    .setTitle('Travel Users service')
+    .setDescription('Travel Users service')
+    .setVersion('0.1')
+    .addBearerAuth()
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 }

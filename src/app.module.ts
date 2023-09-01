@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/entities/user.entity';
-import { AuthModule } from './auth/auth.module';
-import { AppController } from './app.controller';
 import { BullModule } from '@nestjs/bull';
-import { Auth } from './auth/entities/auth.entity';
-import redisConfiguration, { IRedisConfig } from './config/redis.configuration';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import dbConfiguration, { IDBConfig } from './config/db.configuration';
+import { AppController } from './app.controller';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import { validationSchema } from './config/validation-schema.configuration';
+import dbConfiguration, { IDBConfig } from './config/db.configuration';
+import redisConfiguration, { IRedisConfig } from './config/redis.configuration';
 import throttleConfiguration, { IThrottleConfig } from './config/throttle.configuration';
-import EncryptionModule from './transformers/encryption.module';
 import encryptionConfiguration from './config/encryption.configuration';
+import jwtConfiguration from './config/jwt.configuration';
+import { User } from './users/entities/user.entity';
+import { Auth } from './auth/entities/auth.entity';
 
 @Module({
   imports: [
@@ -25,15 +25,23 @@ import encryptionConfiguration from './config/encryption.configuration';
         allowUnknown: true,
         abortEarly: true,
       },
-      load: [dbConfiguration, redisConfiguration, throttleConfiguration, encryptionConfiguration],
+      load: [
+        dbConfiguration,
+        redisConfiguration,
+        throttleConfiguration,
+        encryptionConfiguration,
+        jwtConfiguration,
+      ],
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: async (configService: ConfigService) => ({
-        ...configService.get<IDBConfig>('db'),
-        type: 'mariadb',
-        entities: [User, Auth],
-        logging: true,
-      }),
+      useFactory: async (configService: ConfigService) => {
+        return {
+          ...configService.get<IDBConfig>('db'),
+          type: 'mariadb',
+          entities: [User, Auth],
+          logging: true,
+        };
+      },
       inject: [ConfigService],
     }),
     BullModule.forRootAsync({
@@ -58,9 +66,7 @@ import encryptionConfiguration from './config/encryption.configuration';
       }),
       inject: [ConfigService],
     }),
-
-    // EncryptionModule.forRootAsync({})
-    // AuthModule,
+    AuthModule,
     UsersModule,
   ],
   controllers: [AppController],

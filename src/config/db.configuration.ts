@@ -9,7 +9,7 @@ export interface IDBConfig {
   synchronize: boolean;
 }
 
-export default registerAs('db', () => ({
+export const DbConfiguration = registerAs('db', () => ({
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT),
   username: process.env.DB_USERNAME,

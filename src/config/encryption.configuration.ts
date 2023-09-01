@@ -14,4 +14,4 @@ export interface IEncryptionConfig {
   ivLength: number;
 }
 
-export default registerAs('encryption', () => EncryptionTransformerConfig);
+export const EncryptionConfiguration = registerAs('encryption', () => EncryptionTransformerConfig);

@@ -4,6 +4,8 @@ export function validationSchema() {
   return Joi.object({
     NODE_ENV: Joi.string().valid('development', 'testing', 'staging', 'preprod', 'prod').exist(),
 
+    LOGGER_LEVEL: Joi.string().valid('debug', 'info', 'warn', 'error', 'verbose'),
+
     DB_HOST: Joi.string().exist(),
     DB_PORT: Joi.number().exist(),
     DB_USERNAME: Joi.string().exist(),

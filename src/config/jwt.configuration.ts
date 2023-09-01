@@ -5,7 +5,7 @@ export interface IJWTConfig {
   signOptions: { expiresIn: string };
 }
 
-export default registerAs('jwt', () => ({
+export const JwtConfiguration = registerAs('jwt', () => ({
   secret: process.env.JWT_SECRET,
   signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
 }));

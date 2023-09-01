@@ -8,13 +8,15 @@ import { AppController } from './app.controller';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { validationSchema } from './config/validation-schema.configuration';
-import dbConfiguration, { IDBConfig } from './config/db.configuration';
-import redisConfiguration, { IRedisConfig } from './config/redis.configuration';
-import throttleConfiguration, { IThrottleConfig } from './config/throttle.configuration';
-import encryptionConfiguration from './config/encryption.configuration';
-import jwtConfiguration from './config/jwt.configuration';
 import { User } from './users/entities/user.entity';
 import { Auth } from './auth/entities/auth.entity';
+import { LoggerModule } from './logger/logger.module';
+import { DbConfiguration, IDBConfig } from './config/db.configuration';
+import { RedisConfiguration, IRedisConfig } from './config/redis.configuration';
+import { ThrottleConfiguration, IThrottleConfig } from './config/throttle.configuration';
+import { EncryptionConfiguration } from './config/encryption.configuration';
+import { JwtConfiguration } from './config/jwt.configuration';
+import { LoggerConfiguration } from './config/logger.configuration';
 
 @Module({
   imports: [
@@ -26,11 +28,12 @@ import { Auth } from './auth/entities/auth.entity';
         abortEarly: true,
       },
       load: [
-        dbConfiguration,
-        redisConfiguration,
-        throttleConfiguration,
-        encryptionConfiguration,
-        jwtConfiguration,
+        DbConfiguration,
+        RedisConfiguration,
+        ThrottleConfiguration,
+        EncryptionConfiguration,
+        JwtConfiguration,
+        LoggerConfiguration,
       ],
     }),
     TypeOrmModule.forRootAsync({
@@ -66,6 +69,7 @@ import { Auth } from './auth/entities/auth.entity';
       }),
       inject: [ConfigService],
     }),
+    LoggerModule,
     AuthModule,
     UsersModule,
   ],

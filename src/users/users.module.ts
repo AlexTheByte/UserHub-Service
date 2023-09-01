@@ -10,6 +10,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { IRedisConfig } from 'src/config/redis.configuration';
+import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
   imports: [
@@ -30,9 +31,10 @@ import { IRedisConfig } from 'src/config/redis.configuration';
       ],
     }),
     AuthModule,
+    LoggerModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersJobsConsumer],
-  exports: [UsersService],
+  exports: [],
 })
 export class UsersModule {}

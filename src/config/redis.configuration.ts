@@ -1,4 +1,4 @@
-import { ConfigService, registerAs } from '@nestjs/config';
+import { registerAs } from '@nestjs/config';
 
 export interface IRedisConfig {
   host: string;
@@ -6,7 +6,7 @@ export interface IRedisConfig {
   password: string;
 }
 
-export default registerAs('redis', () => ({
+export const RedisConfiguration = registerAs('redis', () => ({
   host: process.env.REDIS_HOST,
   port: parseInt(process.env.REDIS_PORT),
   password: process.env.REDIS_PASSWORD,

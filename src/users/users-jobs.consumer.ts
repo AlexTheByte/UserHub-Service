@@ -11,22 +11,23 @@ import { Inject } from '@nestjs/common';
 import { TravelEvent } from 'src/enums/travel-event.enums';
 import { UserEventType } from 'src/enums/user-event-type.enums';
 import { ICreateAuth } from 'src/auth/interfaces/create-auth.interface';
-import CustomLoggerService from 'src/logger.service';
 import CreateUserDto from './dto/create-user.dto';
+import { CustomLoggerService } from 'src/logger/logger.service';
 
 @Processor(TravelJobQueue.User)
 export class UsersJobsConsumer {
-  private readonly logger = new CustomLoggerService(UsersJobsConsumer.name);
-
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     @Inject('REDIS_QUEUE_CLIENT') private readonly client: ClientProxy,
-  ) {}
+    private readonly loggerService: CustomLoggerService,
+  ) {
+    loggerService.init(UsersJobsConsumer.name);
+  }
 
   @Process(UserJobType.Create)
   async creation(job: Job<CreateUserDto>) {
-    this.logger.debug(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
+    this.loggerService.debug(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
 
     const userInfo: ICreateUser = _.pick(job.data, ['firstName', 'lastName']);
     const authInfo: ICreateAuth = _.pick(job.data, ['email', 'password']);
@@ -37,13 +38,13 @@ export class UsersJobsConsumer {
 
       this.client.emit(`${TravelEvent.User}:${UserEventType.Create}`, user);
     } catch (e) {
-      this.logger.error(e.message);
+      this.loggerService.error(e.message);
       throw e;
     }
   }
 
   @Process(UserJobType.Update)
   async update(job: Job) {
-    this.logger.info(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
+    this.loggerService.info(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
   }
 }

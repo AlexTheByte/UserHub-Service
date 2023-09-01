@@ -1,7 +1,7 @@
-import ResponseDto from 'src/dto/response.dto';
+import { ResponseDto } from 'src/dto/response.dto';
 import { User } from '../entities/user.entity';
 
-export default class UserResponseDto extends ResponseDto<User> {
+export class UserResponseDto extends ResponseDto<User> {
   firstName: string;
   lastName: string;
 

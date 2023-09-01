@@ -1,4 +1,4 @@
-export default class ResponseDto<T> {
+export class ResponseDto<T> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor(data: T) {}
 

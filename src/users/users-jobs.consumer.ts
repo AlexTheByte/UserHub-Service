@@ -11,7 +11,7 @@ import { Inject } from '@nestjs/common';
 import { TravelEvent } from 'src/enums/travel-event.enums';
 import { UserEventType } from 'src/enums/user-event-type.enums';
 import { ICreateAuth } from 'src/auth/interfaces/create-auth.interface';
-import CreateUserDto from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { CustomLoggerService } from 'src/logger/logger.service';
 
 @Processor(TravelJobQueue.User)

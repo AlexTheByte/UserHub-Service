@@ -1,8 +1,8 @@
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
-import ResponseDto from 'src/dto/response.dto';
-import AuthResponseDto from './dto/auth-response.dto';
+import { ResponseDto } from 'src/dto/response.dto';
+import { AuthResponseDto } from './dto/auth-response.dto';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {

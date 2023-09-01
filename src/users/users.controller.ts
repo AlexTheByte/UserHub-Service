@@ -19,9 +19,9 @@ import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
 import { Queue } from 'bull';
 import { UserJobType } from 'src/enums/user-job-type.enums';
 import { User } from './entities/user.entity';
-import ResponseDto from 'src/dto/response.dto';
-import UserResponseDto from './dto/user-response.dto';
-import CreateUserDto from './dto/create-user.dto';
+import { ResponseDto } from 'src/dto/response.dto';
+import { UserResponseDto } from './dto/user-response.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller({
   path: 'users',

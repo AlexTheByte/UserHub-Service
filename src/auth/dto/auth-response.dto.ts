@@ -1,6 +1,6 @@
-import ResponseDto from 'src/dto/response.dto';
+import { ResponseDto } from 'src/dto/response.dto';
 
-export default class AuthResponseDto extends ResponseDto<string> {
+export class AuthResponseDto extends ResponseDto<string> {
   access_token: string;
 
   constructor(access_token: string) {

@@ -40,4 +40,8 @@ export class AuthService {
       password: await bcrypt.hash(auth.password, 10),
     });
   }
+
+  async remove(auth: Auth) {
+    return await this.authsRepository.remove(auth);
+  }
 }

@@ -3,9 +3,7 @@ import { CustomLoggerService } from './logger/logger.service';
 
 @Controller({ version: '1' })
 export class AppController {
-  constructor(private readonly loggerService: CustomLoggerService) {
-    loggerService.init(AppController.name);
-  }
+  constructor(private readonly loggerService: CustomLoggerService) {}
 
   @Get()
   test() {

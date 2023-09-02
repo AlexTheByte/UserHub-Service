@@ -8,9 +8,7 @@ import * as DailyRotateFile from 'winston-daily-rotate-file';
 export class CustomLoggerService implements LoggerService {
   private logger: winston.Logger;
 
-  constructor(private readonly configService: ConfigService) {}
-
-  init(fileName: string) {
+  constructor(private readonly configService: ConfigService) {
     const level = this.configService.get<ILoggerConfig>('logger').level;
 
     this.logger = winston.createLogger({
@@ -18,7 +16,7 @@ export class CustomLoggerService implements LoggerService {
         winston.format.align(),
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.printf(({ level, message, timestamp }) => {
-          return `${timestamp} [${fileName}] ${level}: ${message}`;
+          return `${timestamp} ${level.toUpperCase()}: ${message}`;
         }),
       ),
       transports: [

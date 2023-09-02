@@ -20,4 +20,10 @@ export class User {
     transformer: new EncryptionTransformer(EncryptionTransformerConfig),
   })
   lastName: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  avatar: string;
 }

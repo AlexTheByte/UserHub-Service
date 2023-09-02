@@ -22,7 +22,7 @@ export class UsersJobsConsumer {
     @Inject('REDIS_QUEUE_CLIENT') private readonly client: ClientProxy,
     private readonly loggerService: CustomLoggerService,
   ) {
-    loggerService.init(UsersJobsConsumer.name);
+    // loggerService.init(UsersJobsConsumer.name);
   }
 
   @Process(UserJobType.Create)

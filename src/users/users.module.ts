@@ -11,6 +11,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { IRedisConfig } from 'src/config/redis.configuration';
 import { LoggerModule } from 'src/logger/logger.module';
+import { AvatarsModule } from 'src/avatars/avatars.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { LoggerModule } from 'src/logger/logger.module';
         },
       ],
     }),
+    AvatarsModule,
     AuthModule,
     LoggerModule,
   ],

@@ -8,6 +8,8 @@ import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { IRedisConfig } from './config/redis.configuration';
 import helmet from 'helmet';
+import * as express from 'express';
+import { join } from 'path';
 
 function configVersioning(app: INestApplication) {
   app.enableVersioning({
@@ -41,6 +43,10 @@ function configHelmet(app: INestApplication) {
   app.use(helmet());
 }
 
+function configPublicAvatarDirectory(app) {
+  app.use('/avatars', express.static(join(__dirname, '../storage/avatars', '')));
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
@@ -48,6 +54,7 @@ async function bootstrap() {
   configVersioning(app);
   configMicroservices(app);
   configSwagger(app);
+  configPublicAvatarDirectory(app);
 
   await app.listen(3000);
 }

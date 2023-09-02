@@ -17,6 +17,10 @@ import { ThrottleConfiguration, IThrottleConfig } from './config/throttle.config
 import { EncryptionConfiguration } from './config/encryption.configuration';
 import { JwtConfiguration } from './config/jwt.configuration';
 import { LoggerConfiguration } from './config/logger.configuration';
+// import { MulterModule } from '@nestjs/platform-express';
+// import { join } from 'path';
+import { FilerModule } from './filer/filer.module';
+import { AvatarsModule } from './avatars/avatars.module';
 
 @Module({
   imports: [
@@ -42,7 +46,7 @@ import { LoggerConfiguration } from './config/logger.configuration';
           ...configService.get<IDBConfig>('db'),
           type: 'mariadb',
           entities: [User, Auth],
-          logging: true,
+          // logging: true,
         };
       },
       inject: [ConfigService],
@@ -69,6 +73,11 @@ import { LoggerConfiguration } from './config/logger.configuration';
       }),
       inject: [ConfigService],
     }),
+    AvatarsModule,
+    // MulterModule.register({
+    //   dest: join(__dirname, '..', 'storage', 'avatars'),
+    // }),
+    FilerModule,
     LoggerModule,
     AuthModule,
     UsersModule,

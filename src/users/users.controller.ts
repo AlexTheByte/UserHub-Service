@@ -89,7 +89,7 @@ export class UsersController {
 
     const avatarName = await this.avatarsService.create(avatar);
 
-    this.usersService.update(userId, { avatar: avatarName });
+    await this.usersService.update(userId, { avatar: avatarName });
 
     return {};
   }
@@ -101,7 +101,7 @@ export class UsersController {
     const user = await this.usersService.findOne(userId);
 
     if (!!user.avatar) {
-      this.avatarsService.delete(user.avatar);
+      await this.avatarsService.delete(user.avatar);
     }
 
     await this.usersService.delete(userId);

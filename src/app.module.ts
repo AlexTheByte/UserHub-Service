@@ -57,11 +57,11 @@ import { AvatarsModule } from './avatars/avatars.module';
           ...configService.get<IRedisConfig>('redis'),
         },
         defaultJobOptions: {
-          attempts: 10, // Nombre de réessayages max
+          attempts: 10,
           removeOnFail: false,
           backoff: {
-            type: 'fixed', // Type de backoff (exponentiel dans cet exemple)
-            delay: 1000, // Délai initial entre les réessayages en millisecondes
+            type: 'fixed', // fixed or exponential
+            delay: 1000,
           },
         },
       }),
@@ -74,9 +74,6 @@ import { AvatarsModule } from './avatars/avatars.module';
       inject: [ConfigService],
     }),
     AvatarsModule,
-    // MulterModule.register({
-    //   dest: join(__dirname, '..', 'storage', 'avatars'),
-    // }),
     FilerModule,
     LoggerModule,
     AuthModule,

@@ -1,31 +1,29 @@
 import { Processor, Process } from '@nestjs/bull';
 import { Job } from 'bull';
-import { UserJobType } from 'src/enums/user-job-type.enums';
-import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
 import { UsersService } from './users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { ICreateUser } from './interfaces/create-user.interface';
 import * as _ from 'lodash';
 import { Inject } from '@nestjs/common';
-import { TravelEvent } from 'src/enums/travel-event.enums';
-import { UserEventType } from 'src/enums/user-event-type.enums';
 import { ICreateAuth } from 'src/auth/interfaces/create-auth.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CustomLoggerService } from 'src/logger/logger.service';
+import { JobTypeUser } from '@travel-1/travel-sdk';
+import { JobTravel } from '@travel-1/travel-sdk';
+import { EventTravel } from '@travel-1/travel-sdk';
+import { EventTypeUser } from '@travel-1/travel-sdk';
 
-@Processor(TravelJobQueue.User)
+@Processor(JobTravel.User)
 export class UsersJobsConsumer {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     @Inject('REDIS_QUEUE_CLIENT') private readonly client: ClientProxy,
     private readonly loggerService: CustomLoggerService,
-  ) {
-    // loggerService.init(UsersJobsConsumer.name);
-  }
+  ) {}
 
-  @Process(UserJobType.Create)
+  @Process(JobTypeUser.Create)
   async creation(job: Job<CreateUserDto>) {
     this.loggerService.debug(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
 
@@ -36,14 +34,14 @@ export class UsersJobsConsumer {
       const user = await this.usersService.create(userInfo);
       await this.authService.create(user, authInfo);
 
-      this.client.emit(`${TravelEvent.User}:${UserEventType.Create}`, user);
+      this.client.emit(`${EventTravel.User}:${EventTypeUser.Create}`, user);
     } catch (e) {
       this.loggerService.error(e.message);
       throw e;
     }
   }
 
-  @Process(UserJobType.Update)
+  @Process(JobTypeUser.Update)
   async update(job: Job) {
     this.loggerService.info(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
   }

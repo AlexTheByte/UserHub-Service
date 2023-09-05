@@ -16,9 +16,9 @@ import {
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { InjectQueue } from '@nestjs/bull';
-import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
 import { Queue } from 'bull';
-import { UserJobType } from 'src/enums/user-job-type.enums';
+import { JobTravel } from '@travel-1/travel-sdk';
+import { JobTypeUser } from '@travel-1/travel-sdk';
 import { User } from './entities/user.entity';
 import { ResponseDto } from 'src/dto/response.dto';
 import { UserResponseDto } from './dto/user-response.dto';
@@ -34,13 +34,13 @@ export class UsersController {
   constructor(
     private readonly avatarsService: AvatarsService,
     private readonly usersService: UsersService,
-    @InjectQueue(TravelJobQueue.User) private readonly usersJobsQueue: Queue,
+    @InjectQueue(JobTravel.User) private readonly usersJobsQueue: Queue,
   ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto): Promise<object> {
-    await this.usersJobsQueue.add(UserJobType.Create, createUserDto);
+    await this.usersJobsQueue.add(JobTypeUser.Create, createUserDto);
     return {};
   }
 
@@ -69,7 +69,7 @@ export class UsersController {
   // @UseGuards(JwtAuthGuard)
   // @HttpCode(HttpStatus.NO_CONTENT)
   // async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-  //   await this.usersJobsQueue.add(UserJobType.Update, updateUserDto);
+  //   await this.usersJobsQueue.add(JobTypeUser.Update, updateUserDto);
   //   return {};
   // }
 

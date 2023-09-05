@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UsersJobsConsumer } from 'src/users/users-jobs.consumer';
 import { BullModule } from '@nestjs/bull';
-import { TravelJobQueue } from 'src/enums/travel-job-queue.enums';
+import { JobTravel } from '@travel-1/travel-sdk';
 import { AuthModule } from 'src/auth/auth.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
@@ -17,7 +17,7 @@ import { AvatarsModule } from 'src/avatars/avatars.module';
   imports: [
     TypeOrmModule.forFeature([User]),
     BullModule.registerQueue({
-      name: TravelJobQueue.User,
+      name: JobTravel.User,
     }),
     ClientsModule.registerAsync({
       clients: [

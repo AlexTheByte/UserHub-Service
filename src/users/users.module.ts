@@ -22,7 +22,7 @@ import { AvatarsModule } from 'src/avatars/avatars.module';
     ClientsModule.registerAsync({
       clients: [
         {
-          name: 'REDIS_QUEUE_CLIENT',
+          name: 'REDIS_EVENT_CLIENT',
           useFactory: async (configService: ConfigService) => ({
             transport: Transport.REDIS,
             options: { ...configService.get<IRedisConfig>('redis') },

@@ -19,7 +19,7 @@ export class UsersJobsConsumer {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-    @Inject('REDIS_QUEUE_CLIENT') private readonly client: ClientProxy,
+    @Inject('REDIS_EVENT_CLIENT') private readonly eventClient: ClientProxy,
     private readonly loggerService: CustomLoggerService,
   ) {}
 
@@ -34,7 +34,7 @@ export class UsersJobsConsumer {
       const user = await this.usersService.create(userInfo);
       await this.authService.create(user, authInfo);
 
-      this.client.emit(`${EventTravel.User}:${EventTypeUser.Create}`, user);
+      this.eventClient.emit(`${EventTravel.User}:${EventTypeUser.Create}`, user);
     } catch (e) {
       this.loggerService.error(e.message);
       throw e;

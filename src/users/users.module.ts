@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { IRedisConfig } from 'src/config/redis.configuration';
 import { LoggerModule } from 'src/logger/logger.module';
 import { AvatarsModule } from 'src/avatars/avatars.module';
+import { UserRpcConsumer } from './users-rpc.consumer';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { AvatarsModule } from 'src/avatars/avatars.module';
     AuthModule,
     LoggerModule,
   ],
-  controllers: [UsersController],
+  controllers: [UsersController, UserRpcConsumer],
   providers: [UsersService, UsersJobsConsumer],
   exports: [],
 })

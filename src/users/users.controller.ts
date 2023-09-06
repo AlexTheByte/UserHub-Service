@@ -51,10 +51,10 @@ export class UsersController {
     return UserResponseDto.create(user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<ResponseDto<User[]>> {
-    const users = await this.usersService.findAll();
+    const users = await this.usersService.find([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
     return UserResponseDto.create(users);
   }
 

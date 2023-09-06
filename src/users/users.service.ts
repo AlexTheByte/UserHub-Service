@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, FindOptionsWhere, In, Repository, UpdateResult } from 'typeorm';
 import { ICreateUser } from './interfaces/create-user.interface';
 import { IUpdateUser } from './interfaces/update-user.interface';
 import { CustomLoggerService } from 'src/logger/logger.service';
@@ -18,19 +18,24 @@ export class UsersService {
     return await this.usersRepository.save(user);
   }
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async find(ids: Array<number>): Promise<User[]> {
+    return await this.usersRepository.findBy({ id: In(ids) });
   }
 
-  async findOne(userId: number): Promise<User> {
-    return this.usersRepository.findOneByOrFail({ id: userId });
+  async findOne(id: number): Promise<User> {
+    return await this.usersRepository.findOneByOrFail({ id });
   }
 
-  async update(userId: number, updateUserDto: IUpdateUser): Promise<UpdateResult> {
-    return await this.usersRepository.update(userId, updateUserDto);
+  async update(id: number, updateUserDto: IUpdateUser): Promise<UpdateResult> {
+    return await this.usersRepository.update(id, updateUserDto);
   }
 
-  async delete(userId: number): Promise<DeleteResult> {
-    return await this.usersRepository.delete(userId);
+  async delete(id: number): Promise<DeleteResult> {
+    return await this.usersRepository.delete(id);
+  }
+
+  async findBy(where: FindOptionsWhere<User>): Promise<User[]> {
+    console.log(where);
+    return await this.usersRepository.findBy(where);
   }
 }

@@ -11,8 +11,8 @@ import helmet from 'helmet';
 import * as express from 'express';
 import { join } from 'path';
 
-function configVersioning(app: INestApplication) {
-  app.enableVersioning({
+function configPrefixVersioning(app: INestApplication) {
+  app.setGlobalPrefix('api').enableVersioning({
     type: VersioningType.URI,
   });
 }
@@ -28,12 +28,26 @@ function configSwagger(app: INestApplication) {
   SwaggerModule.setup('docs', app, document);
 }
 
-function configMicroservices(app: INestApplication) {
+function configRedisMicroservices(app: INestApplication) {
   const redisConfig = app.get(ConfigService).get<IRedisConfig>('redis');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.REDIS,
     options: { ...redisConfig },
+  });
+
+  app.startAllMicroservices();
+}
+
+function configRpcMicroservices(app: INestApplication) {
+  // const redisConfig = app.get(ConfigService).get<IRedisConfig>('redis');
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.TCP,
+    options: {
+      host: '0.0.0.0',
+      port: 3001,
+    },
   });
 
   app.startAllMicroservices();
@@ -51,8 +65,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
   configHelmet(app);
-  configVersioning(app);
-  configMicroservices(app);
+  configPrefixVersioning(app);
+  configRedisMicroservices(app);
+  configRpcMicroservices(app);
   configSwagger(app);
   configPublicAvatarDirectory(app);
 

@@ -1,4 +1,4 @@
-import { ResponseDto } from 'src/dto/response.dto';
+import { ResponseDto } from '@travel-1/travel-sdk';
 
 export class AuthResponseDto extends ResponseDto<string> {
   access_token: string;

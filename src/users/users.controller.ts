@@ -20,7 +20,7 @@ import { Queue } from 'bull';
 import { JobTravel } from '@travel-1/travel-sdk';
 import { JobTypeUser } from '@travel-1/travel-sdk';
 import { User } from './entities/user.entity';
-import { ResponseDto } from 'src/dto/response.dto';
+import { ResponseDto } from '@travel-1/travel-sdk';
 import { UserResponseDto } from './dto/user-response.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';

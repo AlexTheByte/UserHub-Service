@@ -1,4 +1,4 @@
-import { ResponseDto } from 'src/dto/response.dto';
+import { ResponseDto } from '@travel-1/travel-sdk';
 import { User } from '../entities/user.entity';
 
 export class UserResponseDto extends ResponseDto<User> {

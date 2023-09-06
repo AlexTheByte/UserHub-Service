@@ -1,9 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './local-auth.guard';
-import { ResponseDto } from 'src/dto/response.dto';
-import { AuthResponseDto } from './dto/auth-response.dto';
+import { ResponseDto } from '@travel-1/travel-sdk';
 
 describe('AuthController', () => {
   let authController: AuthController;

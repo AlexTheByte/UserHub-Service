@@ -4,16 +4,18 @@ import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { UserResponseDto } from './dto/user-response.dto';
 import { Controller } from '@nestjs/common';
-import { FindOperator, FindOptionsWhere } from 'typeorm';
+import { FindOptionsWhere } from 'typeorm';
+import { UsersRpcParam } from './users-rpc-param.decorator';
 
 @Controller()
 export class UserRpcConsumer {
   constructor(private readonly usersService: UsersService) {}
 
   @MessagePattern('users')
-  async users(where: FindOptionsWhere<User>): Promise<ResponseDto<User>> {
-    const id = new FindOperator(where['id']['_type'], where['id']['_value']);
-    const users = await this.usersService.findBy({ id });
+  async users(
+    @UsersRpcParam() findOptionsWhere: FindOptionsWhere<User>,
+  ): Promise<ResponseDto<User>> {
+    const users = await this.usersService.findBy(findOptionsWhere);
     return UserResponseDto.create(users);
   }
 }

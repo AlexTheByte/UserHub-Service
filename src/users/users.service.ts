@@ -35,7 +35,6 @@ export class UsersService {
   }
 
   async findBy(where: FindOptionsWhere<User>): Promise<User[]> {
-    console.log(where);
     return await this.usersRepository.findBy(where);
   }
 }

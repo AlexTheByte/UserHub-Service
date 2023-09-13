@@ -51,14 +51,6 @@ export class UsersController {
     return UserResponseDto.create(user);
   }
 
-  // @UseGuards(JwtAuthGuard)
-  @Get()
-  async test(): Promise<ResponseDto<User[]>> {
-    const user = await this.usersService.findOne(1);
-    console.log(user);
-    return UserResponseDto.create(user);
-  }
-
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) userId: number): Promise<ResponseDto<User>> {
@@ -66,18 +58,10 @@ export class UsersController {
     return UserResponseDto.create(user);
   }
 
-  // @Patch(':id')
-  // @UseGuards(JwtAuthGuard)
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-  //   await this.usersJobsQueue.add(JobTypeUser.Update, updateUserDto);
-  //   return {};
-  // }
-
   // @UseGuards(JwtAuthGuard)
   @Post(':id/avatar')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseInterceptors(FileInterceptor('avatar'))
+  @UseInterceptors(FileInterceptor('avatar')) // TODO : Checker si besoin de ça
   async avatar(
     @Param('id', ParseIntPipe) userId: number,
     @UploadedFile() avatar: Express.Multer.File,
@@ -109,3 +93,17 @@ export class UsersController {
     return {};
   }
 }
+
+// @Patch(':id')
+// @UseGuards(JwtAuthGuard)
+// @HttpCode(HttpStatus.NO_CONTENT)
+// async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+//   await this.usersJobsQueue.add(JobTypeUser.Update, updateUserDto);
+//   return {};
+// }
+// @UseGuards(JwtAuthGuard)
+// @Get()
+// async findAll(): Promise<ResponseDto<User[]>> {
+//   const users = await this.usersService.find([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+//   return UserResponseDto.create(users);
+// }

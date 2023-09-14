@@ -44,7 +44,7 @@ import { AvatarsModule } from './avatars/avatars.module';
           ...configService.get<IDBConfig>('db'),
           type: 'mariadb',
           entities: [User, Auth],
-          // logging: true,
+          logging: true,
         };
       },
       inject: [ConfigService],

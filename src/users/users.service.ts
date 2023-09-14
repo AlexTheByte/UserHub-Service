@@ -18,11 +18,11 @@ export class UsersService {
     return await this.usersRepository.save(user);
   }
 
-  async find(ids: Array<number>): Promise<User[]> {
+  async findByIds(ids: Array<number>): Promise<User[]> {
     return await this.usersRepository.findBy({ id: In(ids) });
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOneById(id: number): Promise<User> {
     return await this.usersRepository.findOneByOrFail({ id });
   }
 

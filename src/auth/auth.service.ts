@@ -17,7 +17,7 @@ export class AuthService {
 
   async validate(email: string, password: string): Promise<any> {
     const auth = await this.authsRepository.findOne({
-      where: { email: email },
+      where: { email },
       relations: ['user'],
     });
 
@@ -33,9 +33,19 @@ export class AuthService {
     return await this.jwtService.sign(payload);
   }
 
+  async verifyToken(token: string): Promise<boolean> {
+    try {
+      const decoded = await this.jwtService.verifyAsync(token);
+      return !!decoded;
+    } catch (error) {
+      // Le token est invalide ou a expiré
+      return false;
+    }
+  }
+
   async create(user: User, auth: ICreateAuth) {
     return await this.authsRepository.save({
-      user: user,
+      user,
       email: auth.email,
       password: await bcrypt.hash(auth.password, 10),
     });

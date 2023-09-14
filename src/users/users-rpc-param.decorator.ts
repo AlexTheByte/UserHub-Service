@@ -6,8 +6,9 @@ function decrypt(findOptionsWhere: FindOptionsWhere<User>) {
   const optionsDecrypted = {};
 
   for (const option in findOptionsWhere) {
-    if (typeof findOptionsWhere[option] === 'object') {
-      let Type = null;
+    let Type = null;
+
+    if (!!findOptionsWhere[option]['_type']) {
       switch (findOptionsWhere[option]['_type']) {
         case 'in':
           Type = In;
@@ -20,9 +21,7 @@ function decrypt(findOptionsWhere: FindOptionsWhere<User>) {
         default:
           throw new Error('Where type unknown');
       }
-
       optionsDecrypted[option] = Type(findOptionsWhere[option]['_value']);
-
       continue;
     }
 

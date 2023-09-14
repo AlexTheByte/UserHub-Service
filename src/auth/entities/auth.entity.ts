@@ -12,7 +12,7 @@ export class Auth {
   @Column()
   password: string;
 
-  @OneToOne(type => User, { cascade: true, onDelete: 'CASCADE', lazy: true })
+  @OneToOne(type => User, { nullable: false, cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 }

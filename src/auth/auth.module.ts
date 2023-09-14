@@ -9,9 +9,10 @@ import { Auth } from './entities/auth.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { IJWTConfig } from 'src/config/jwt.configuration';
+import { AuthRpcConsumer } from './auth-rpc.consumer';
 
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthController, AuthRpcConsumer],
   imports: [
     TypeOrmModule.forFeature([Auth]),
     PassportModule,

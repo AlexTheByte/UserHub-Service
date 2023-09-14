@@ -47,14 +47,14 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async me(@Request() req): Promise<ResponseDto<User>> {
-    const user = await this.usersService.findOne(req.user.id);
+    const user = await this.usersService.findOneById(req.user.id);
     return UserResponseDto.create(user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) userId: number): Promise<ResponseDto<User>> {
-    const user = await this.usersService.findOne(userId);
+    const user = await this.usersService.findOneById(userId);
     return UserResponseDto.create(user);
   }
 
@@ -66,7 +66,7 @@ export class UsersController {
     @Param('id', ParseIntPipe) userId: number,
     @UploadedFile() avatar: Express.Multer.File,
   ): Promise<object> {
-    const user = await this.usersService.findOne(userId);
+    const user = await this.usersService.findOneById(userId);
 
     if (!!user.avatar) {
       await this.avatarsService.delete(user.avatar);
@@ -83,7 +83,7 @@ export class UsersController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id', ParseIntPipe) userId: number): Promise<object> {
-    const user = await this.usersService.findOne(userId);
+    const user = await this.usersService.findOneById(userId);
 
     if (!!user.avatar) {
       await this.avatarsService.delete(user.avatar);

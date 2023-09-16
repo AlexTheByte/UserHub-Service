@@ -4,6 +4,10 @@ services:
   travel-users-service:
     container_name: travel-users-service
     image: node:20
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.travel-users-service.rule=PathPrefix(`/api/v1/users`)"
+      - "traefik.http.routers.travel-users-service.entrypoints=web"
     volumes:
       - .:/usr/src/app
       - ./../travel-sdk:/usr/src/travel-sdk
@@ -32,3 +36,4 @@ services:
 networks:
   travel-network:
     external: true
+    name: travel-network

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as sharp from 'sharp';
 import { FilerService } from 'src/filer/filer.service';
-import { CustomLoggerService } from 'src/logger/logger.service';
+import { CustomLoggerService } from '@travel-1/travel-sdk';
 
 @Injectable()
 export class AvatarsService {

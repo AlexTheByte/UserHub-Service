@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CustomLoggerService } from 'src/logger/logger.service';
+import { CustomLoggerService } from '@travel-1/travel-sdk';
 import * as fs from 'fs';
 
 @Injectable()

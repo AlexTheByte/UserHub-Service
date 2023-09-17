@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 import { DeleteResult, FindOptionsWhere, In, Repository, UpdateResult } from 'typeorm';
 import { ICreateUser } from './interfaces/create-user.interface';
 import { IUpdateUser } from './interfaces/update-user.interface';
-import { CustomLoggerService } from 'src/logger/logger.service';
+import { CustomLoggerService } from '@travel-1/travel-sdk';
 
 @Injectable()
 export class UsersService {

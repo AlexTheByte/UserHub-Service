@@ -10,7 +10,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { IRedisConfig } from 'src/config/redis.configuration';
-import { LoggerModule } from 'src/logger/logger.module';
+import { LoggerModule } from '@travel-1/travel-sdk';
 import { AvatarsModule } from 'src/avatars/avatars.module';
 import { UserRpcConsumer } from './users-rpc.consumer';
 

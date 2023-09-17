@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import { Inject } from '@nestjs/common';
 import { ICreateAuth } from 'src/auth/interfaces/create-auth.interface';
 import { CreateUserDto } from './dto/create-user.dto';
-import { CustomLoggerService } from 'src/logger/logger.service';
+import { CustomLoggerService } from '@travel-1/travel-sdk';
 import { JobTypeUser } from '@travel-1/travel-sdk';
 import { JobTravel } from '@travel-1/travel-sdk';
 import { EventTravel } from '@travel-1/travel-sdk';

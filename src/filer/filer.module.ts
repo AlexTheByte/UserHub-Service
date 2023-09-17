@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { FilerService } from './filer.service';
-import { LoggerModule } from 'src/logger/logger.module';
+import { LoggerModule } from '@travel-1/travel-sdk';
 
 @Module({
   imports: [LoggerModule],

@@ -10,15 +10,13 @@ import { AuthModule } from './auth/auth.module';
 import { validationSchema } from './config/validation-schema.configuration';
 import { User } from './users/entities/user.entity';
 import { Auth } from './auth/entities/auth.entity';
-// import { LoggerModule } from './logger/logger.module';
 import { DbConfiguration, IDBConfig } from './config/db.configuration';
 import { RedisConfiguration, IRedisConfig } from './config/redis.configuration';
 import { ThrottleConfiguration, IThrottleConfig } from './config/throttle.configuration';
 import { EncryptionConfiguration } from './config/encryption.configuration';
 import { JwtConfiguration } from './config/jwt.configuration';
-import { FilerModule } from './filer/filer.module';
 import { AvatarsModule } from './avatars/avatars.module';
-
+import { FilerModule } from '@travel-1/travel-sdk';
 import { LoggerModule } from '@travel-1/travel-sdk';
 
 @Module({

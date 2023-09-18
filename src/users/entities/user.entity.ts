@@ -12,14 +12,21 @@ export class User {
     nullable: false,
     transformer: new EncryptionTransformer(EncryptionTransformerConfig),
   })
-  firstName: string;
+  first_name: string;
 
   @Column({
     type: 'varchar',
     nullable: false,
     transformer: new EncryptionTransformer(EncryptionTransformerConfig),
   })
-  lastName: string;
+  last_name: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    transformer: new EncryptionTransformer(EncryptionTransformerConfig),
+  })
+  mobile_phone: string;
 
   @Column({
     type: 'varchar',

@@ -12,8 +12,8 @@ describe('UsersController', () => {
   let userRepository: Repository<User>;
 
   const testData: Partial<User>[] = [
-    { firstName: 'firstName', lastName: 'lastName' },
-    { firstName: 'firstName', lastName: 'lastName' },
+    { first_name: 'first_name', last_name: 'last_name' },
+    { first_name: 'first_name', last_name: 'last_name' },
   ];
 
   beforeAll(async () => {

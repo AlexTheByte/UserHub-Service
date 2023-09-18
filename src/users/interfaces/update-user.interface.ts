@@ -1,7 +1,8 @@
 export interface IUpdateUser {
   email?: string;
   password?: string;
-  firstName?: string;
-  lastName?: string;
+  first_name?: string;
+  last_name?: string;
   avatar?: string;
+  mobile_phone?: string;
 }

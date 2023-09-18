@@ -8,9 +8,7 @@ export class AuthRpcConsumer {
 
   @MessagePattern('auth')
   async auth(token: any): Promise<boolean> {
-    console.log(token);
     const assertion = await this.authService.verifyToken(token);
-    console.log(assertion);
     return assertion;
   }
 }

@@ -1,4 +1,5 @@
 export interface ICreateUser {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
+  mobile_phone: string;
 }

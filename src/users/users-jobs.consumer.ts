@@ -19,8 +19,8 @@ export class UsersJobsConsumer {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-    @Inject('REDIS_EVENT_CLIENT') private readonly eventClient: ClientProxy,
     private readonly loggerService: CustomLoggerService,
+    @Inject('REDIS_EVENT_CLIENT') private readonly eventClient: ClientProxy,
   ) {}
 
   @Process(JobTypeUser.Create)
@@ -44,5 +44,6 @@ export class UsersJobsConsumer {
   @Process(JobTypeUser.Update)
   async update(job: Job) {
     this.loggerService.info(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
+    // TODO : Faire l'update de l'user
   }
 }

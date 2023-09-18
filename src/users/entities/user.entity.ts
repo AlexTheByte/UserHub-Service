@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { EncryptionTransformer } from 'typeorm-encrypted';
 import { EncryptionTransformerConfig } from 'src/config/encryption.configuration';
 
+// TODO : Ajouter date d'anniv
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()

@@ -2,8 +2,6 @@ import {
   Controller,
   Get,
   Body,
-  Param,
-  ParseIntPipe,
   UseGuards,
   Request,
   Post,
@@ -12,7 +10,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Delete,
-  ForbiddenException,
+  Patch,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -67,6 +65,14 @@ export class UsersController {
 
     await this.usersService.update(req.user.id, { avatar: avatarName });
 
+    return {};
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async update(@Request() req): Promise<object> {
+    // TODO : Faire la gestion de l'update
     return {};
   }
 

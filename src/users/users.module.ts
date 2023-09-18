@@ -21,6 +21,7 @@ import { UserRpcConsumer } from './users-rpc.consumer';
       name: JobTravel.User,
     }),
     ClientsModule.registerAsync({
+      // TODO : Voir comment mettre ça sous AppModule.ts puis faire l'envoi de mail pour l'update de password.
       clients: [
         {
           name: 'REDIS_EVENT_CLIENT',

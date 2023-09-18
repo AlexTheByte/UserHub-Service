@@ -12,6 +12,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Delete,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -52,21 +53,11 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) userId: number): Promise<ResponseDto<User>> {
-    const user = await this.usersService.findOneById(userId);
-    return UserResponseDto.create(user);
-  }
-
-  // @UseGuards(JwtAuthGuard)
-  @Post(':id/avatar')
+  @Post('avatar')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseInterceptors(FileInterceptor('avatar')) // TODO : Checker si besoin de ça
-  async avatar(
-    @Param('id', ParseIntPipe) userId: number,
-    @UploadedFile() avatar: Express.Multer.File,
-  ): Promise<object> {
-    const user = await this.usersService.findOneById(userId);
+  @UseInterceptors(FileInterceptor('avatar'))
+  async avatar(@Request() req, @UploadedFile() avatar: Express.Multer.File): Promise<object> {
+    const user = await this.usersService.findOneById(req.user.id);
 
     if (!!user.avatar) {
       await this.avatarsService.delete(user.avatar);
@@ -74,36 +65,22 @@ export class UsersController {
 
     const avatarName = await this.avatarsService.create(avatar);
 
-    await this.usersService.update(userId, { avatar: avatarName });
+    await this.usersService.update(req.user.id, { avatar: avatarName });
 
     return {};
   }
 
-  // @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id', ParseIntPipe) userId: number): Promise<object> {
-    const user = await this.usersService.findOneById(userId);
+  async delete(@Request() req): Promise<object> {
+    const user = await this.usersService.findOneById(req.user.id);
 
     if (!!user.avatar) {
       await this.avatarsService.delete(user.avatar);
     }
 
-    await this.usersService.delete(userId);
+    await this.usersService.delete(req.user.id);
     return {};
   }
 }
-
-// @Patch(':id')
-// @UseGuards(JwtAuthGuard)
-// @HttpCode(HttpStatus.NO_CONTENT)
-// async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-//   await this.usersJobsQueue.add(JobTypeUser.Update, updateUserDto);
-//   return {};
-// }
-// @UseGuards(JwtAuthGuard)
-// @Get()
-// async findAll(): Promise<ResponseDto<User[]>> {
-//   const users = await this.usersService.find([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
-//   return UserResponseDto.create(users);
-// }

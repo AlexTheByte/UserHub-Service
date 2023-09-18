@@ -6,10 +6,10 @@ export class Auth {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
   @OneToOne(type => User, { nullable: false, cascade: true, onDelete: 'CASCADE' })

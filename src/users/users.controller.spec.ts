@@ -4,6 +4,12 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity'; // Assume you have a User entity defined
 import { Repository } from 'typeorm';
+import { JobTravel, LoggerModule } from '@travel-1/travel-sdk';
+import { AvatarsModule } from 'src/avatars/avatars.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { BullModule } from '@nestjs/bull';
+import { ConfigModule } from '@nestjs/config';
+import { JwtConfiguration } from 'src/config/jwt.configuration';
 
 describe('UsersController', () => {
   let app: TestingModule;
@@ -12,8 +18,8 @@ describe('UsersController', () => {
   let userRepository: Repository<User>;
 
   const testData: Partial<User>[] = [
-    { first_name: 'first_name', last_name: 'last_name' },
-    { first_name: 'first_name', last_name: 'last_name' },
+    { first_name: 'first_name', last_name: 'last_name', mobile_phone: '+33612345678' },
+    { first_name: 'first_name', last_name: 'last_name', mobile_phone: '+33612345678' },
   ];
 
   beforeAll(async () => {
@@ -22,18 +28,36 @@ describe('UsersController', () => {
       providers: [UsersService],
       imports: [
         TypeOrmModule.forRoot({
-          type: 'sqlite', // Change this to match your DB type
-          database: ':memory:', // Use an in-memory database for testing
+          type: 'sqlite',
+          database: ':memory:',
           entities: [User],
           synchronize: true,
         }),
         TypeOrmModule.forFeature([User]),
+        BullModule.registerQueue({
+          name: JobTravel.User,
+        }),
+        LoggerModule,
+        AvatarsModule,
+        AuthModule,
+        ConfigModule.forRoot({
+          isGlobal: true,
+          validationOptions: {
+            allowUnknown: true,
+            abortEarly: true,
+          },
+          load: [JwtConfiguration],
+        }),
       ],
     }).compile();
 
     usersController = app.get<UsersController>(UsersController);
     userService = app.get<UsersService>(UsersService);
     userRepository = app.get<Repository<User>>(getRepositoryToken(User));
+  });
+
+  afterAll(async () => {
+    app.close();
   });
 
   beforeEach(async () => {
@@ -46,10 +70,17 @@ describe('UsersController', () => {
     expect(usersController).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return a all user', async () => {
-      const result = await usersController.findAll();
-      expect(result).toEqual(testData);
+  describe('create', () => {
+    it('should create an user', async () => {
+      const result = await usersController.create({
+        email: 'test@test.test',
+        mobile_phone: '+33633756390',
+        password: 'password',
+        first_name: 'first_name',
+        last_name: 'last_name',
+      });
+
+      expect(result).toEqual({});
     });
   });
 

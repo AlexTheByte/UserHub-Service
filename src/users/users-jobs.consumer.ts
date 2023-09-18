@@ -27,7 +27,7 @@ export class UsersJobsConsumer {
   async creation(job: Job<CreateUserDto>) {
     this.loggerService.debug(`Processing job #${job.id} with data ${JSON.stringify(job.data)}`);
 
-    const userInfo: ICreateUser = _.pick(job.data, ['first_name', 'last_name']);
+    const userInfo: ICreateUser = _.pick(job.data, ['first_name', 'last_name', 'mobile_phone']);
     const authInfo: ICreateAuth = _.pick(job.data, ['email', 'password']);
 
     try {

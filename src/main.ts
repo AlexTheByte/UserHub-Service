@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { INestApplication, VersioningType } from '@nestjs/common';
+import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
@@ -61,6 +61,10 @@ function configPublicAvatarDirectory(app) {
   app.use('/avatars', express.static(join(__dirname, '../storage/avatars', '')));
 }
 
+function configValidationPipe(app) {
+  app.useGlobalPipes(new ValidationPipe());
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
@@ -70,6 +74,7 @@ async function bootstrap() {
   configRpcMicroservices(app);
   configSwagger(app);
   configPublicAvatarDirectory(app);
+  configValidationPipe(app);
 
   await app.listen(3000);
 }

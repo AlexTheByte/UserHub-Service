@@ -11,6 +11,8 @@ import { ConfigService } from '@nestjs/config';
 import { IJWTConfig } from 'src/config/jwt.configuration';
 import { AuthRpcConsumer } from './auth-rpc.consumer';
 import { LoggerModule } from '@travel-1/travel-sdk';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { IRedisConfig } from 'src/config/redis.configuration';
 
 @Module({
   controllers: [AuthController, AuthRpcConsumer],
@@ -22,6 +24,19 @@ import { LoggerModule } from '@travel-1/travel-sdk';
         return { ...configService.get<IJWTConfig>('jwt') };
       },
       inject: [ConfigService],
+    }),
+    ClientsModule.registerAsync({
+      // TODO : Voir comment mettre ça sous AppModule.ts puis faire l'envoi de mail pour l'update de password.
+      clients: [
+        {
+          name: 'REDIS_EVENT_CLIENT',
+          useFactory: async (configService: ConfigService) => ({
+            transport: Transport.REDIS,
+            options: { ...configService.get<IRedisConfig>('redis') },
+          }),
+          inject: [ConfigService],
+        },
+      ],
     }),
     LoggerModule,
   ],

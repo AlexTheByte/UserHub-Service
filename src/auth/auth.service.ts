@@ -17,6 +17,39 @@ export class AuthService {
   ) {}
 
   /**
+   * Find user by email
+   * @param email
+   * @returns user
+   */
+  async findByEmail(email: string): Promise<Auth> {
+    return await this.authsRepository.findOne({
+      where: { email },
+    });
+  }
+
+  /**
+   * Find user by email
+   * @param email
+   * @returns user
+   */
+  async findByResetPasswordToken(reset_password_token: string): Promise<Auth> {
+    return await this.authsRepository.findOne({
+      where: { reset_password_token },
+    });
+  }
+
+  /**
+   * Find user by email
+   * @param email
+   * @returns user
+   */
+  async findByUser(user: User): Promise<Auth> {
+    return await this.authsRepository.findOne({
+      where: { user },
+    });
+  }
+
+  /**
    * Validate the email and password of the user
    * @param email
    * @param password
@@ -41,8 +74,29 @@ export class AuthService {
    * @returns Jwt Token
    */
   async login(user: User): Promise<string> {
-    const payload = { sub: user.id };
+    const payload = {
+      sub: user.id,
+      user_updated_at: user.updated_at,
+      user_created_at: user.created_at,
+    };
     return await this.jwtService.sign(payload);
+  }
+
+  /**
+   * Create a forgot password token
+   * @param auth
+   * @returns forgot password token
+   */
+  async forgotPassword(auth: Auth): Promise<string> {
+    const payload = {
+      sub: auth.id,
+      auth_updated_at: auth.updated_at,
+      auth_created_at: auth.created_at,
+    };
+    auth.reset_password_token = await this.jwtService.sign(payload);
+    await this.authsRepository.save(auth);
+
+    return auth.reset_password_token;
   }
 
   /**
@@ -89,17 +143,19 @@ export class AuthService {
    * @param authUpdate
    * @returns update result
    */
-  async update(user: User, authUpdate: IUpdateAuth) {
-    const auth = await this.authsRepository.findOne({
-      where: { user },
-    });
+  async update(auth: Auth, authUpdate: IUpdateAuth) {
+    // Reset password
+    if (!!authUpdate.new_nassword && !authUpdate.old_password) {
+      auth.password = await bcrypt.hash(authUpdate.new_nassword, 10);
+      return await this.authsRepository.save(auth);
+    }
 
     // Email
     if (!!authUpdate.email) {
       auth.email = authUpdate.email;
     }
 
-    // Password
+    // New password
     if (!!authUpdate.new_nassword && !!authUpdate.old_password) {
       await this.validate(auth.email, authUpdate.old_password);
       auth.password = await bcrypt.hash(authUpdate.new_nassword, 10);

@@ -100,6 +100,7 @@ export class UsersController {
   async update(@Request() req, @Body() updateUserDto: UpdateUserDto): Promise<object> {
     try {
       const user = await this.usersService.update(req.user, updateUserDto);
+      this.eventClient.emit(`${EventTravel.User}:${EventTypeUser.Update}`, user);
       return UserResponseDto.create(user);
     } catch (e) {
       this.loggerService.error(e.message);

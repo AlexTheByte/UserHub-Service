@@ -86,7 +86,10 @@ export class AuthController {
 
     if (!!auth) {
       try {
-        await this.authService.update(auth, { new_nassword: resetPasswordDto.new_password });
+        await this.authService.update(auth, {
+          reset_password_token: null,
+          new_nassword: resetPasswordDto.new_password,
+        });
       } catch (e) {
         this.loggerService.error(e.message);
         throw new InternalServerErrorException();

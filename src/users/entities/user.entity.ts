@@ -1,8 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { EncryptionTransformer } from 'typeorm-encrypted';
 import { EncryptionTransformerConfig } from 'src/config/encryption.configuration';
 
-// TODO : Ajouter date d'anniv
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
@@ -31,7 +36,28 @@ export class User {
 
   @Column({
     type: 'varchar',
+    nullable: false,
+    transformer: new EncryptionTransformer(EncryptionTransformerConfig),
+  })
+  birth_date: Date;
+
+  @Column({
+    type: 'varchar',
     nullable: true,
+    transformer: new EncryptionTransformer(EncryptionTransformerConfig),
   })
   avatar: string;
+
+  @Column({
+    type: 'longtext',
+    nullable: true,
+    transformer: new EncryptionTransformer(EncryptionTransformerConfig),
+  })
+  bio: string;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
 }

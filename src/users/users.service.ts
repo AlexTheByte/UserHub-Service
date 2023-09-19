@@ -26,8 +26,33 @@ export class UsersService {
     return await this.usersRepository.findOneByOrFail({ id });
   }
 
-  async update(id: number, updateUserDto: IUpdateUser): Promise<UpdateResult> {
-    return await this.usersRepository.update(id, updateUserDto);
+  async update(user: User, updateUserDto: IUpdateUser): Promise<User> {
+    // First name
+    if (!!updateUserDto.first_name) {
+      user.first_name = updateUserDto.first_name;
+    }
+
+    // Last name
+    if (!!updateUserDto.last_name) {
+      user.last_name = updateUserDto.last_name;
+    }
+
+    // Bio
+    if (!!updateUserDto.bio) {
+      user.bio = updateUserDto.bio;
+    }
+
+    // Avatar
+    if (!!updateUserDto.avatar) {
+      user.avatar = updateUserDto.avatar;
+    }
+
+    // Mobile phone
+    if (!!updateUserDto.mobile_phone) {
+      user.mobile_phone = updateUserDto.mobile_phone;
+    }
+
+    return await this.usersRepository.save(user);
   }
 
   async delete(id: number): Promise<DeleteResult> {

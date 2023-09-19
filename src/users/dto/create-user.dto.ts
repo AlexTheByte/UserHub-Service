@@ -1,4 +1,5 @@
-import { IsDefined, IsEmail, IsMobilePhone, Length } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsDefined, IsEmail, IsMobilePhone, Length } from 'class-validator';
 
 export class CreateUserDto {
   @IsDefined()
@@ -19,4 +20,9 @@ export class CreateUserDto {
   @Length(2, 40)
   @IsDefined()
   last_name: string;
+
+  @IsDate()
+  @Type(() => Date)
+  @IsDefined()
+  birth_date: Date;
 }

@@ -30,6 +30,8 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: travel_db
+    volumes:
+      - ./travel-db.cnf:/etc/mysql/conf.d/travel-db.cnf
     networks:
       - travel-network
 

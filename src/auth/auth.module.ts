@@ -10,6 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { IJWTConfig } from 'src/config/jwt.configuration';
 import { AuthRpcConsumer } from './auth-rpc.consumer';
+import { LoggerModule } from '@travel-1/travel-sdk';
 
 @Module({
   controllers: [AuthController, AuthRpcConsumer],
@@ -22,6 +23,7 @@ import { AuthRpcConsumer } from './auth-rpc.consumer';
       },
       inject: [ConfigService],
     }),
+    LoggerModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],

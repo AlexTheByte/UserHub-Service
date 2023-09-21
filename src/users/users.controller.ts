@@ -29,6 +29,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { ClientProxy } from '@nestjs/microservices';
 import * as _ from 'lodash';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ReferencesService } from 'src/references/references.service';
 
 @Controller({
   path: 'users',
@@ -40,9 +41,15 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly loggerService: CustomLoggerService,
+    private readonly referencesService: ReferencesService,
     @Inject('REDIS_EVENT_CLIENT') private readonly eventClient: ClientProxy,
   ) {}
 
+  @Get()
+  async test() {
+    const test = await this.referencesService.findAll('languages');
+    console.log(test);
+  }
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto): Promise<object> {

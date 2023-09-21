@@ -15,6 +15,11 @@ export function validationSchema() {
     REDIS_PORT: Joi.number().exist(),
     REDIS_PASSWORD: Joi.string().exist(),
 
+    HOST_RPC_PORT: Joi.number().exist(),
+
+    RPC_REFERENCES_HOST: Joi.string().exist(),
+    RPC_REFERENCES_PORT: Joi.number().exist(),
+
     THROTTLE_TTL: Joi.number().exist(),
     THROTTLE_LIMIT: Joi.number().exist(),
 

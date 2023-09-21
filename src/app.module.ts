@@ -18,6 +18,9 @@ import { JwtConfiguration } from './config/jwt.configuration';
 import { AvatarsModule } from './avatars/avatars.module';
 import { FilerModule } from '@travel-1/travel-sdk';
 import { LoggerModule } from '@travel-1/travel-sdk';
+import { HostRpcConfiguration } from './config/host-rpc.configuration';
+import { RpcReferencesConfiguration } from './config/rpc-references.configuration';
+import { ReferencesModule } from './references/references.module';
 
 @Module({
   imports: [
@@ -34,6 +37,8 @@ import { LoggerModule } from '@travel-1/travel-sdk';
         ThrottleConfiguration,
         EncryptionConfiguration,
         JwtConfiguration,
+        HostRpcConfiguration,
+        RpcReferencesConfiguration,
       ],
     }),
     TypeOrmModule.forRootAsync({
@@ -74,6 +79,7 @@ import { LoggerModule } from '@travel-1/travel-sdk';
     LoggerModule,
     AuthModule,
     UsersModule,
+    ReferencesModule,
   ],
   controllers: [AppController],
   providers: [

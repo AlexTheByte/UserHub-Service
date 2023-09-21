@@ -1,5 +1,4 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
@@ -10,6 +9,7 @@ import { IRedisConfig } from './config/redis.configuration';
 import helmet from 'helmet';
 import * as express from 'express';
 import { join } from 'path';
+import { IHostRpcConfig } from './config/host-rpc.configuration';
 
 function configPrefixVersioning(app: INestApplication) {
   app.setGlobalPrefix('api').enableVersioning({
@@ -40,13 +40,13 @@ function configRedisMicroservices(app: INestApplication) {
 }
 
 function configRpcMicroservices(app: INestApplication) {
-  // const redisConfig = app.get(ConfigService).get<IRedisConfig>('redis');
+  const rpcConfig = app.get(ConfigService).get<IHostRpcConfig>('host-rpc');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
       host: '0.0.0.0',
-      port: 3001,
+      ...rpcConfig,
     },
   });
 

@@ -10,6 +10,7 @@ import { IRedisConfig } from 'src/config/redis.configuration';
 import { LoggerModule } from '@travel-1/travel-sdk';
 import { AvatarsModule } from 'src/avatars/avatars.module';
 import { UserRpcConsumer } from './users-rpc.consumer';
+import { ReferencesModule } from 'src/references/references.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UserRpcConsumer } from './users-rpc.consumer';
     AvatarsModule,
     AuthModule,
     LoggerModule,
+    ReferencesModule,
   ],
   controllers: [UsersController, UserRpcConsumer],
   providers: [UsersService],

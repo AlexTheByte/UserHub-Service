@@ -2,5 +2,5 @@ export interface ICreateUser {
   first_name: string;
   last_name: string;
   mobile_phone: string;
-  birthdate: Date;
+  birth_date: Date;
 }

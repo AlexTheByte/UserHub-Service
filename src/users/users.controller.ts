@@ -29,7 +29,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { ClientProxy } from '@nestjs/microservices';
 import * as _ from 'lodash';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ReferencesService } from 'src/references/references.service';
 import { IUpdateUser } from './interfaces/update-user.interface';
 
 @Controller({

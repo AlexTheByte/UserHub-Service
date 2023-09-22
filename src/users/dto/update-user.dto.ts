@@ -1,4 +1,13 @@
-import { IsDefined, IsEmail, IsMobilePhone, IsOptional, Length, MaxLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsDate,
+  IsDefined,
+  IsMobilePhone,
+  IsOptional,
+  Length,
+  MaxLength,
+} from 'class-validator';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -13,7 +22,20 @@ export class UpdateUserDto {
   @Length(2, 40)
   last_name: string;
 
+  @IsDefined()
+  @IsDate()
+  @Type(() => Date)
+  birth_date: Date;
+
   @IsOptional()
   @MaxLength(512)
   bio: string;
+
+  @IsOptional()
+  @IsArray()
+  languages: Array<number>;
+
+  @IsOptional()
+  @IsArray()
+  interests: Array<number>;
 }

@@ -30,6 +30,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import * as _ from 'lodash';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ReferencesService } from 'src/references/references.service';
+import { IUpdateUser } from './interfaces/update-user.interface';
 
 @Controller({
   path: 'users',
@@ -41,15 +42,9 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly loggerService: CustomLoggerService,
-    private readonly referencesService: ReferencesService,
     @Inject('REDIS_EVENT_CLIENT') private readonly eventClient: ClientProxy,
   ) {}
 
-  @Get()
-  async test() {
-    const test = await this.referencesService.findAll('languages');
-    console.log(test);
-  }
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto): Promise<object> {
@@ -103,10 +98,20 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Patch()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async update(@Request() req, @Body() updateUserDto: UpdateUserDto): Promise<object> {
+  @HttpCode(HttpStatus.OK)
+  async update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
+    const userInfo: IUpdateUser = _.pick(updateUserDto, [
+      'mobile_phone',
+      'first_name',
+      'last_name',
+      'birth_date',
+      'bio',
+      'languages',
+      'interests',
+    ]);
+
     try {
-      const user = await this.usersService.update(req.user, updateUserDto);
+      const user = await this.usersService.update(req.user, userInfo);
       this.eventClient.emit(`${EventTravel.User}:${EventTypeUser.Update}`, user);
       return UserResponseDto.create(user);
     } catch (e) {

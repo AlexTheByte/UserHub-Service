@@ -13,16 +13,16 @@ export class CreateUserDto {
   @IsDefined()
   password: string;
 
-  @Length(2, 40)
   @IsDefined()
+  @Length(2, 40)
   first_name: string;
 
-  @Length(2, 40)
   @IsDefined()
+  @Length(2, 40)
   last_name: string;
 
+  @IsDefined()
   @IsDate()
   @Type(() => Date)
-  @IsDefined()
   birth_date: Date;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { DeleteResult, FindOptionsWhere, In, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, FindOptionsWhere, In, Repository } from 'typeorm';
 import { ICreateUser } from './interfaces/create-user.interface';
 import { IUpdateUser } from './interfaces/update-user.interface';
 import { CustomLoggerService } from '@travel-1/travel-sdk';
@@ -37,6 +37,11 @@ export class UsersService {
       user.last_name = updateUserDto.last_name;
     }
 
+    // Birth date
+    if (!!updateUserDto.birth_date) {
+      user.birth_date = updateUserDto.birth_date;
+    }
+
     // Bio
     if (!!updateUserDto.bio) {
       user.bio = updateUserDto.bio;
@@ -50,6 +55,16 @@ export class UsersService {
     // Mobile phone
     if (!!updateUserDto.mobile_phone) {
       user.mobile_phone = updateUserDto.mobile_phone;
+    }
+
+    // Languages
+    if (!!updateUserDto.languages) {
+      user.languages = updateUserDto.languages;
+    }
+
+    // Interests
+    if (!!updateUserDto.interests) {
+      user.interests = updateUserDto.interests;
     }
 
     return await this.usersRepository.save(user);

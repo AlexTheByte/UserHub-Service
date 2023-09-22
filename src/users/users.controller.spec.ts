@@ -1,69 +1,38 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { User } from './entities/user.entity'; // Assume you have a User entity defined
-import { Repository } from 'typeorm';
-import { JobTravel, LoggerModule } from '@travel-1/travel-sdk';
-import { AvatarsModule } from 'src/avatars/avatars.module';
-import { AuthModule } from 'src/auth/auth.module';
-import { BullModule } from '@nestjs/bull';
-import { ConfigModule } from '@nestjs/config';
-import { JwtConfiguration } from 'src/config/jwt.configuration';
+import { AuthService } from 'src/auth/auth.service';
+import { AvatarsService } from 'src/avatars/avatars.service';
+import { CustomLoggerService } from '@travel-1/travel-sdk';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 
 describe('UsersController', () => {
-  let app: TestingModule;
   let usersController: UsersController;
-  let userService: UsersService;
-  let userRepository: Repository<User>;
+  let usersService: UsersService;
+  let authService: AuthService;
+  let avatarsService: AvatarsService;
 
-  const testData: Partial<User>[] = [
-    { first_name: 'first_name', last_name: 'last_name', mobile_phone: '+33612345678' },
-    { first_name: 'first_name', last_name: 'last_name', mobile_phone: '+33612345678' },
-  ];
-
-  beforeAll(async () => {
-    app = await Test.createTestingModule({
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService],
-      imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          entities: [User],
-          synchronize: true,
-        }),
-        TypeOrmModule.forFeature([User]),
-        BullModule.registerQueue({
-          name: JobTravel.User,
-        }),
-        LoggerModule,
-        AvatarsModule,
-        AuthModule,
-        ConfigModule.forRoot({
-          isGlobal: true,
-          validationOptions: {
-            allowUnknown: true,
-            abortEarly: true,
-          },
-          load: [JwtConfiguration],
-        }),
+      providers: [
+        UsersService,
+        AuthService,
+        AvatarsService,
+        CustomLoggerService,
+        {
+          provide: 'REDIS_EVENT_CLIENT', // Le nom de la dépendance
+          useValue: eventClientMock, // Utilisez le mock que vous avez créé
+        },
+        // Autres dépendances nécessaires ici
       ],
     }).compile();
 
-    usersController = app.get<UsersController>(UsersController);
-    userService = app.get<UsersService>(UsersService);
-    userRepository = app.get<Repository<User>>(getRepositoryToken(User));
-  });
-
-  afterAll(async () => {
-    app.close();
-  });
-
-  beforeEach(async () => {
-    await userRepository.clear();
-
-    await userRepository.save(testData);
+    usersController = module.get<UsersController>(UsersController);
+    usersService = module.get<UsersService>(UsersService);
+    authService = module.get<AuthService>(AuthService);
+    avatarsService = module.get<AvatarsService>(AvatarsService);
   });
 
   it('should be defined', () => {
@@ -71,30 +40,47 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    it('should create an user', async () => {
-      const result = await usersController.create({
-        email: 'test@test.test',
-        mobile_phone: '+33633756390',
-        password: 'password',
-        first_name: 'first_name',
-        last_name: 'last_name',
-      });
+    it('should create a new user and return an empty object', async () => {
+      // Mock data for CreateUserDto
+      const createUserDto: CreateUserDto = {
+        first_name: 'John',
+        last_name: 'Doe',
+        mobile_phone: '1234567890',
+        birth_date: new Date(),
+        // ... other properties
+      };
 
+      // Mock data for creating a user
+      const createUser: User = {
+        id: 1,
+        // ... other properties
+      };
+
+      // Mock data for CreateAuthDto
+      const createAuthDto: CreateAuthDto = {
+        email: 'john@example.com',
+        password: 'password123',
+        // ... other properties
+      };
+
+      // Configure behavior of service mocks
+      jest.spyOn(usersService, 'create').mockResolvedValue(createUser);
+      jest.spyOn(authService, 'create');
+
+      // Call the create method of the controller
+      const result = await usersController.create(createUserDto);
+
+      // Assert that the create method of the service was called with the correct data
+      expect(usersService.create).toHaveBeenCalledWith(expect.objectContaining(createUserDto));
+      expect(authService.create).toHaveBeenCalledWith(
+        createUser,
+        expect.objectContaining(createAuthDto),
+      );
+
+      // Assert that the result is an empty object
       expect(result).toEqual({});
     });
   });
 
-  // describe('getUserById', () => {
-  //   it('should return a user when given a valid id', async () => {
-  //   const allUsers = await userService.findAll(); // You should implement findAll in UserService
-  //   const userId = allUsers[0].id; // Get the ID of the first user
-  //   const result = await usersController.getUserById(userId);
-  //   expect(result).toBeDefined();
-  //   expect(result.id).toBe(userId);
-  // });
-  // it('should return null when given an invalid id', async () => {
-  //   const result = await usersController.getUserById('invalidUserId');
-  //   expect(result).toBeNull();
-  // });
-  // });
+  // Add more test cases for other methods of UsersController if needed
 });

@@ -47,7 +47,7 @@ import { ReferencesModule } from './references/references.module';
           ...configService.get<IDBConfig>('db'),
           type: 'mariadb',
           entities: [User, Auth],
-          logging: true,
+          logging: false,
         };
       },
       inject: [ConfigService],

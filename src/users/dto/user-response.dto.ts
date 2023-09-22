@@ -7,6 +7,8 @@ export class UserResponseDto extends ResponseDto<User> {
   birth_date: Date;
   avatar: string;
   bio: string;
+  languages: Array<number>;
+  interests: Array<number>;
 
   constructor(user: User) {
     super(user);
@@ -16,5 +18,7 @@ export class UserResponseDto extends ResponseDto<User> {
     this.birth_date = user.birth_date;
     this.avatar = user.avatar;
     this.bio = user.bio;
+    this.languages = user.languages;
+    this.interests = user.interests;
   }
 }

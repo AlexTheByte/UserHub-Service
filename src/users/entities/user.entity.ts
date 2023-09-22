@@ -55,6 +55,12 @@ export class User {
   })
   bio: string;
 
+  @Column('simple-array', { nullable: true })
+  languages: Array<any>;
+
+  @Column('simple-array', { nullable: true })
+  interests: Array<any>;
+
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 

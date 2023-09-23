@@ -5,9 +5,11 @@ import {
   HttpStatus,
   Inject,
   InternalServerErrorException,
+  NotFoundException,
   Patch,
   Post,
   Request,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -18,7 +20,6 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { ClientProxy } from '@nestjs/microservices';
-import { Auth } from './entities/auth.entity';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller({ path: 'auth', version: '1' })
@@ -37,7 +38,7 @@ export class AuthController {
       return AuthResponseDto.create(token);
     } catch (e) {
       this.loggerService.error(e.message);
-      throw new InternalServerErrorException();
+      throw new UnauthorizedException();
     }
   }
 
@@ -51,7 +52,7 @@ export class AuthController {
       return {};
     } catch (e) {
       this.loggerService.error(e.message);
-      throw new InternalServerErrorException();
+      throw new NotFoundException();
     }
   }
 
@@ -70,7 +71,7 @@ export class AuthController {
         });
       } catch (e) {
         this.loggerService.error(e.message);
-        throw new InternalServerErrorException();
+        throw new NotFoundException();
       }
     }
 
@@ -80,20 +81,20 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('reset-password')
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<object> {
-    const auth = await this.authService.findByResetPasswordToken(
-      resetPasswordDto.reset_password_token,
-    );
+    try {
+      const auth = await this.authService.findByResetPasswordToken(
+        resetPasswordDto.reset_password_token,
+      );
 
-    if (!!auth) {
-      try {
+      if (!!auth) {
         await this.authService.update(auth, {
           reset_password_token: null,
           new_nassword: resetPasswordDto.new_password,
         });
-      } catch (e) {
-        this.loggerService.error(e.message);
-        throw new InternalServerErrorException();
       }
+    } catch (e) {
+      this.loggerService.error(e.message);
+      throw new NotFoundException();
     }
 
     return {};

@@ -1,73 +1,61 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="./public/logo/WhatsApp Image 2023-09-22 at 23.40.13.jpeg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  <p align="center">Gogether : <i>Travel User Service</i></p>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# User and Authentication Microservice
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The User and Authentication Microservice is a component of a larger system designed to handle user-related data and user authentication within gogether application. This microservice provides a range of functionality to create, update, delete, and authenticate users.
 
-## Installation
+## Features
 
-```bash
-$ npm install
-```
+- User Registration: Create new user accounts with email and password.
+- User Authentication: Authenticate users using JWT (JSON Web Tokens).
+- User Profile Management: Update user profiles, including personal information.
+- Password Reset: Implement password reset functionality via email.
 
-## Running the app
+## Table of Contents
 
-```bash
-# development
-$ npm run start
+- [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Contributing](#contributing)
+- [License](#license)
 
-# watch mode
-$ npm run start:dev
+## Getting Started
 
-# production mode
-$ npm run start:prod
-```
+This section provides an overview of how to get started with the User and Authentication Microservice.
 
-## Test
+### Prerequisites
 
-```bash
-# unit tests
-$ npm run test
+Before you begin, ensure you have met the following requirements:
 
-# e2e tests
-$ npm run test:e2e
+- Node.js and npm installed.
+- Docker (optional, for containerization).
 
-# test coverage
-$ npm run test:cov
-```
+### Installation
 
-## Support
+1. Clone this repository:
+   ```shell
+   $ git clone https://github.com/your-username/user-auth-microservice.git
+2. Go into the folder cloned 
+   ```shell
+   $ cd travel-user-microservice
+2. Install .env:
+   ```shell 
+   $ cp ./.env.example ./.env 
+3. Install packages then run the containers:
+   ```shell$ cd user-auth-microservice
+   $ npm install
+4. Install packages then run the containers:
+   $ docker compose up -d
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Contributing 
 
-## Stay in touch
+- Alexandre Senia : initiliazer of the project and developer
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### license 
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the TBD License.

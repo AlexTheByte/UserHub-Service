@@ -47,11 +47,11 @@ Before you begin, ensure you have met the following requirements:
    ```shell 
    $ cp ./.env.example ./.env 
 3. Install packages then run the containers:
-   ```shell$ cd user-auth-microservice
+   ```shell
    $ npm install
 4. Install packages then run the containers:
+   ```shell$
    $ docker compose up -d
-
 ### Contributing 
 
 - Alexandre Senia : initiliazer of the project and developer

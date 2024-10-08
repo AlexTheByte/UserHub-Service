@@ -2,12 +2,12 @@
   <a href="http://nestjs.com/" target="blank"><img src="./public/logo/WhatsApp Image 2023-09-22 at 23.40.13.jpeg" width="200" alt="Nest Logo" /></a>
 </p>
 
-  <p align="center">Gogether : <i>Travel User Service</i></p>
+  <p align="center">Service : <i>User Hub</i></p>
 
 # User and Authentication Microservice
 
 
-The User and Authentication Microservice is a component of a larger system designed to handle user-related data and user authentication within gogether application. This microservice provides a range of functionality to create, update, delete, and authenticate users.
+The User and Authentication Microservice is a component and can be integrated in a larger system designed to handle user-related data and user authentication. This microservice provides a range of functionality to create, update, delete, and authenticate users.
 
 ## Features
 
@@ -39,7 +39,7 @@ Before you begin, ensure you have met the following requirements:
 
 1. Clone this repository:
    ```shell
-   $ git clone https://github.com/your-username/user-auth-microservice.git
+   $ git clone https://github.com/AlexTheByte/user-hub-service.git
 2. Go into the folder cloned 
    ```shell
    $ cd travel-user-microservice

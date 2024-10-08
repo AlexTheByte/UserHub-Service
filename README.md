@@ -33,18 +33,23 @@ Before you begin, ensure you have met the following requirements:
 1. Clone this repository:
    ```shell
    $ git clone https://github.com/AlexTheByte/user-hub-service.git
+   ```
 2. Go into the folder cloned 
    ```shell
    $ cd travel-user-microservice
+   ```
 2. Install .env:
    ```shell 
-   $ cp ./.env.example ./.env 
+   $ cp ./.env.example ./.env
+   ``` 
 3. Install packages then run the containers:
    ```shell
    $ npm install
+   ```
 4. Install packages then run the containers:
    ```shell$
    $ docker compose up -d
+   ```
 ### Contributing 
 
 - Alexandre Senia : initiliazer of the project and developer
